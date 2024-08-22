@@ -9,6 +9,6 @@ const Container = styled.p`
   text-transform: uppercase;
 `;
 
-export function Text({ children }: { children: string }) {
-  return <Container>{children}</Container>;
+export function Text({ children, ...props }: { children: string }) {
+  return <Container {...props}>{children}</Container>;
 }

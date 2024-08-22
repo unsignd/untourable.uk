@@ -6,6 +6,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+p {
+  display: inline-block;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
 * {
   margin: 0;
   padding: 0;
