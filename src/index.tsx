@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import { Landing } from './pages/Landing';
 import { Header } from './components/Header';
-import { Window } from './components/Window';
 import styled from 'styled-components';
 import { RecoilRoot } from 'recoil';
 
@@ -26,7 +25,6 @@ root.render(
     <Container>
       <Header />
       <Landing />
-      <Window /> <Window />
     </Container>
   </RecoilRoot>
 );

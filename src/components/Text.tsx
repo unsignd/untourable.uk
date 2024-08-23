@@ -1,5 +1,9 @@
-import { ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 import styled from 'styled-components';
+
+interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
+  children: ReactNode;
+}
 
 const Container = styled.p`
   color: #fff;
@@ -10,6 +14,6 @@ const Container = styled.p`
   text-transform: uppercase;
 `;
 
-export function Text({ children, ...props }: { children: ReactNode }) {
+export function Text({ children, ...props }: TextProps) {
   return <Container {...props}>{children}</Container>;
 }

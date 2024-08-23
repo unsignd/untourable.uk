@@ -8,25 +8,30 @@ const dataState = atom<(FileType | FolderType)[]>({
       name: 'about',
       children: [
         {
-          name: 'award',
+          name: 'awards',
           type: FileEnum.TEXT,
           data: '',
         },
         {
-          name: 'career',
+          name: 'careers',
           type: FileEnum.TEXT,
           data: '',
         },
         {
-          name: 'link',
+          name: 'links',
           type: FileEnum.TEXT,
           data: '',
         },
       ],
     },
     {
-      name: 'project',
-      children: [],
+      name: 'projects',
+      children: [
+        {
+          name: 'projects',
+          children: [],
+        },
+      ],
     },
     {
       name: 'stuff!',
@@ -40,4 +45,9 @@ const dataState = atom<(FileType | FolderType)[]>({
   ],
 });
 
-export { dataState };
+const windowListState = atom<FolderType[]>({
+  key: 'windowState',
+  default: [],
+});
+
+export { dataState, windowListState };

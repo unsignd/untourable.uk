@@ -4,7 +4,13 @@ import { FileType, FolderType } from '../types';
 import { ReactComponent as FileSVG } from '../assets/file_48.svg';
 import { ReactComponent as FolderSVG } from '../assets/folder_48.svg';
 import { isFile } from '../utils';
-import { ReactNode } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
+
+interface ItemProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+
+  type: FileType | FolderType;
+}
 
 const Container = styled.div`
   width: 68px;
@@ -32,15 +38,9 @@ const FileName = styled(Text)`
   pointer-events: none;
 `;
 
-export function Item({
-  children,
-  type,
-}: {
-  children: ReactNode;
-  type: FileType | FolderType;
-}) {
+export function Item({ children, type, ...props }: ItemProps) {
   return (
-    <Container>
+    <Container {...props}>
       {isFile(type) ? <FileSVG /> : <FolderSVG />}
       <FileName>{children}</FileName>
     </Container>

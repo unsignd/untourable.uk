@@ -1,16 +1,21 @@
 import styled from 'styled-components';
 import { Text } from './Text';
 import { useEffect, useState } from 'react';
-import { PositionType } from '../types';
+import { FileEnum, FolderType, PositionType } from '../types';
 import { ReactComponent as CancelSVG } from '../assets/cancel_10.svg';
 import { ReactComponent as MinimizeSVG } from '../assets/minimize_10.svg';
+import { Item } from './Item';
+import { isFile } from '../utils';
+import { useRecoilState } from 'recoil';
+import { windowListState } from '../modules/atom';
 
 const Container = styled.div<{
   $x: number;
   $y: number;
+  $isMinimized: boolean;
 }>`
   width: 640px;
-  height: 400px;
+  height: ${(props) => (props.$isMinimized ? 41 : 400)}px;
 
   position: absolute;
   top: ${(props) => props.$y}px;
@@ -18,6 +23,9 @@ const Container = styled.div<{
 
   background-color: #000;
   border: 1px solid #808080;
+
+  transition: height 250ms ease;
+  overflow: hidden;
 `;
 
 const HeaderContainer = styled.div`
@@ -70,13 +78,28 @@ const Button = styled.button`
   }
 `;
 
-export function Window() {
+const BodyContainer = styled.div`
+  width: 100%;
+  height: calc(100% - 40px);
+
+  padding: 40px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 48px);
+  grid-template-rows: 72px;
+  gap: 80px;
+`;
+
+export function Window({ name, children }: FolderType) {
   const [, setStartPosition] = useState<PositionType>();
   const [position, setPosition] = useState<PositionType>({
     x: 0,
     y: 0,
   });
   const [, setTempPosition] = useState<PositionType>(position);
+  const [isMinimized, setIsMinimzed] = useState<boolean>(false);
+
+  const [windowList, setWindowList] = useRecoilState(windowListState);
 
   useEffect(() => {
     const mouseMoveHandle = (event: MouseEvent) => {
@@ -117,7 +140,7 @@ export function Window() {
   }, []);
 
   return (
-    <Container $x={position.x} $y={position.y}>
+    <Container $x={position.x} $y={position.y} $isMinimized={isMinimized}>
       <HeaderContainer
         onMouseDown={(event) =>
           setStartPosition({
@@ -126,11 +149,15 @@ export function Window() {
           })
         }
       >
-        <Text>./about</Text>
+        <Text>{name}</Text>
         <ButtonGroup>
           <Button
             onMouseDown={(event) => event.stopPropagation()}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setIsMinimzed(!isMinimized);
+            }}
           >
             <MinimizeSVG />
           </Button>
@@ -142,6 +169,33 @@ export function Window() {
           </Button>
         </ButtonGroup>
       </HeaderContainer>
+      <BodyContainer>
+        {children.map((data) => (
+          <Item
+            type={data}
+            onDoubleClick={() =>
+              !isFile(data)
+                ? setWindowList([
+                    ...windowList,
+                    {
+                      name: data.name,
+                      children: data.children,
+                    },
+                  ])
+                : undefined
+            }
+          >
+            {data.name}
+            {isFile(data)
+              ? {
+                  [FileEnum.TEXT]: '.txt',
+                  [FileEnum.IMAGE]: '.png',
+                  [FileEnum.VIDEO]: '.mp4',
+                }[data.type]
+              : ''}
+          </Item>
+        ))}
+      </BodyContainer>
     </Container>
   );
 }
