@@ -4,6 +4,7 @@ import { Landing } from './pages/Landing';
 import { Header } from './components/Header';
 import { Window } from './components/Window';
 import styled from 'styled-components';
+import { RecoilRoot } from 'recoil';
 
 const Container = styled.div`
   width: 100vw;
@@ -21,9 +22,11 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <Container>
-    <Header />
-    <Landing />
-    <Window />
-  </Container>
+  <RecoilRoot>
+    <Container>
+      <Header />
+      <Landing />
+      <Window /> <Window />
+    </Container>
+  </RecoilRoot>
 );

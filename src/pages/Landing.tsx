@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { Item } from '../components/Item';
-import { ItemType } from '../types';
+import { useRecoilState } from 'recoil';
+import { dataState } from '../modules/atom';
+import { isFile } from '../utils';
+import { FileEnum } from '../types';
 
 const Container = styled.div`
   width: 100%;
@@ -15,12 +18,22 @@ const Container = styled.div`
 `;
 
 export function Landing() {
+  const [data] = useRecoilState(dataState);
+
   return (
     <Container>
-      <Item type={ItemType.FOLDER}>about</Item>
-      <Item type={ItemType.FOLDER}>project</Item>
-      <Item type={ItemType.FOLDER}>stuff!</Item>
-      <Item type={ItemType.FILE}>readme.txt</Item>
+      {data.map((data) => (
+        <Item type={data}>
+          {data.name}
+          {isFile(data)
+            ? {
+                [FileEnum.TEXT]: '.txt',
+                [FileEnum.IMAGE]: '.png',
+                [FileEnum.VIDEO]: '.mp4',
+              }[data.type]
+            : ''}
+        </Item>
+      ))}
     </Container>
   );
 }

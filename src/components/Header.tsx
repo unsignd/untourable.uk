@@ -31,7 +31,7 @@ export function Header() {
   return (
     <Container>
       <Text>HTTPS://UNTOURABLE.UK/</Text>
-      <Text>{time}</Text>
+      <Text>{new Date().toLocaleString()}</Text>
     </Container>
   );
 }

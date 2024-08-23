@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Text } from './Text';
 import { useEffect, useState } from 'react';
 import { PositionType } from '../types';
+import { ReactComponent as CancelSVG } from '../assets/cancel_10.svg';
+import { ReactComponent as MinimizeSVG } from '../assets/minimize_10.svg';
 
 const Container = styled.div<{
   $x: number;
@@ -39,6 +41,32 @@ const HeaderContainer = styled.div`
     cursor: grabbing;
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const Button = styled.button`
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #fff;
+  background-color: #000;
+  border: 1px solid #808080;
+
+  cursor: pointer;
+
+  &:hover {
+    color: #000;
+    background-color: #fff;
+    border: none;
   }
 `;
 
@@ -99,6 +127,20 @@ export function Window() {
         }
       >
         <Text>./about</Text>
+        <ButtonGroup>
+          <Button
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <MinimizeSVG />
+          </Button>
+          <Button
+            onMouseDown={(event) => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <CancelSVG />
+          </Button>
+        </ButtonGroup>
       </HeaderContainer>
     </Container>
   );

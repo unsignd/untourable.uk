@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.p`
@@ -9,6 +10,6 @@ const Container = styled.p`
   text-transform: uppercase;
 `;
 
-export function Text({ children, ...props }: { children: string }) {
+export function Text({ children, ...props }: { children: ReactNode }) {
   return <Container {...props}>{children}</Container>;
 }
