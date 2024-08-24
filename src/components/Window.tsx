@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Text } from './Text';
 import { useEffect, useState } from 'react';
-import { FileEnum, FolderType, PositionType } from '../types';
+import { FileEnum, PositionType, WindowType } from '../types';
 import { ReactComponent as CancelSVG } from '../assets/cancel_10.svg';
 import { ReactComponent as MinimizeSVG } from '../assets/minimize_10.svg';
 import { Item } from './Item';
@@ -24,7 +24,7 @@ const Container = styled.div<{
   background-color: #000;
   border: 1px solid #808080;
 
-  transition: height 250ms ease;
+  transition: height 100ms ease;
   overflow: hidden;
 `;
 
@@ -90,12 +90,14 @@ const BodyContainer = styled.div`
   gap: 80px;
 `;
 
-export function Window({ name, children }: FolderType) {
-  const [, setStartPosition] = useState<PositionType>();
-  const [position, setPosition] = useState<PositionType>({
-    x: 0,
-    y: 0,
+export function Window({ id, folder, position, isDeceased }: WindowType) {
+  const [, setTempWindow] = useState<WindowType>({
+    id,
+    folder,
+    position,
+    isDeceased,
   });
+  const [, setStartPosition] = useState<PositionType>();
   const [, setTempPosition] = useState<PositionType>(position);
   const [isMinimized, setIsMinimzed] = useState<boolean>(false);
 
@@ -106,18 +108,38 @@ export function Window({ name, children }: FolderType) {
       setStartPosition((startPosition) => {
         if (startPosition) {
           setTempPosition((tempPosition) => {
-            setPosition({
-              x: tempPosition.x + event.pageX - startPosition.x,
-              y: tempPosition.y + event.pageY - startPosition.y,
+            setTempWindow((window) => {
+              setWindowList([
+                ...windowList.filter((window) => window.id !== id),
+                {
+                  id: window.id,
+                  folder: window.folder,
+                  position: {
+                    x: tempPosition.x + event.pageX - startPosition.x,
+                    y: tempPosition.y + event.pageY - startPosition.y,
+                  },
+                  isDeceased: window.isDeceased,
+                },
+              ]);
+
+              return {
+                id: window.id,
+                folder: window.folder,
+                position: {
+                  x: tempPosition.x + event.pageX - startPosition.x,
+                  y: tempPosition.y + event.pageY - startPosition.y,
+                },
+                isDeceased: window.isDeceased,
+              };
             });
 
             return tempPosition;
           });
         } else {
-          setPosition((position) => {
-            setTempPosition(position);
+          setTempWindow((window) => {
+            setTempPosition(window.position);
 
-            return position;
+            return window;
           });
         }
 
@@ -149,7 +171,7 @@ export function Window({ name, children }: FolderType) {
           })
         }
       >
-        <Text>{name}</Text>
+        <Text>{folder.name}</Text>
         <ButtonGroup>
           <Button
             onMouseDown={(event) => event.stopPropagation()}
@@ -170,20 +192,37 @@ export function Window({ name, children }: FolderType) {
         </ButtonGroup>
       </HeaderContainer>
       <BodyContainer>
-        {children.map((data) => (
+        {folder.children.map((data) => (
           <Item
             type={data}
-            onDoubleClick={() =>
-              !isFile(data)
-                ? setWindowList([
-                    ...windowList,
+            onDoubleClick={() => {
+              if (!isFile(data)) {
+                setTempWindow((window) => {
+                  setWindowList([
+                    ...windowList.filter((window) => window.id !== id),
                     {
+                      id: window.id,
+                      folder: {
+                        name: data.name,
+                        children: data.children,
+                      },
+                      position: window.position,
+                      isDeceased: window.isDeceased,
+                    },
+                  ]);
+
+                  return {
+                    id: window.id,
+                    folder: {
                       name: data.name,
                       children: data.children,
                     },
-                  ])
-                : undefined
-            }
+                    position: window.position,
+                    isDeceased: window.isDeceased,
+                  };
+                });
+              }
+            }}
           >
             {data.name}
             {isFile(data)

@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { FileEnum, FileType, FolderType } from '../types';
+import { FileEnum, FileType, FolderType, WindowType } from '../types';
 
 const dataState = atom<(FileType | FolderType)[]>({
   key: 'dataState',
@@ -45,7 +45,7 @@ const dataState = atom<(FileType | FolderType)[]>({
   ],
 });
 
-const windowListState = atom<FolderType[]>({
+const windowListState = atom<WindowType[]>({
   key: 'windowState',
   default: [],
 });

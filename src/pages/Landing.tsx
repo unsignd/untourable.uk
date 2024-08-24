@@ -27,13 +27,20 @@ export function Landing() {
       {data.map((data) => (
         <Item
           type={data}
-          onDoubleClick={(event) =>
+          onDoubleClick={() =>
             !isFile(data)
               ? setWindowList([
                   ...windowList,
                   {
-                    name: data.name,
-                    children: data.children,
+                    id: windowList.length,
+                    folder: {
+                      name: data.name,
+                      children: data.children,
+                    },
+                    position: {
+                      x: 0,
+                      y: 0,
+                    },
                   },
                 ])
               : undefined

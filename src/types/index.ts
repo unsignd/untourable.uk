@@ -20,4 +20,9 @@ export type FolderType = {
   children: (FileType | FolderType)[];
 };
 
-export type WindowType = {};
+export type WindowType = {
+  id: number;
+  folder: FolderType;
+  position: PositionType;
+  isDeceased?: boolean;
+};
