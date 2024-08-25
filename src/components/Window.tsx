@@ -78,7 +78,14 @@ const Button = styled.button`
   }
 `;
 
-const BodyContainer = styled.div`
+const TextContainer = styled.div`
+  width: 100%;
+  height: calc(100% - 40px);
+
+  padding: 10px;
+`;
+
+const FinderContainer = styled.div`
   width: 100%;
   height: calc(100% - 40px);
 
@@ -90,7 +97,7 @@ const BodyContainer = styled.div`
   gap: 80px;
 `;
 
-export function Window({ id, folder, position, isDeceased }: WindowType) {
+export function Window({ id, data, position }: WindowType) {
   const [isMinimized, setIsMinimzed] = useState<boolean>(false);
 
   const [windowList, setWindowList] = useRecoilState(windowListState);
@@ -109,7 +116,7 @@ export function Window({ id, folder, position, isDeceased }: WindowType) {
           })
         }
       >
-        <Text>{folder.name}</Text>
+        <Text>{data.name}</Text>
         <ButtonGroup>
           <Button
             onMouseDown={(event) => event.stopPropagation()}
@@ -139,36 +146,42 @@ export function Window({ id, folder, position, isDeceased }: WindowType) {
           </Button>
         </ButtonGroup>
       </HeaderContainer>
-      <BodyContainer>
-        {folder.children.map((data) => (
-          <Item
-            type={data}
-            onDoubleClick={() => {
-              if (!isFile(data)) {
-                setWindowList([
-                  ...windowList.filter((window) => window.id !== id),
-                  {
-                    ...windowList.find((window) => window.id === id)!,
-                    folder: {
-                      name: `${folder.name}/${data.name}`,
-                      children: data.children,
+      {isFile(data) ? (
+        <TextContainer>
+          <Text>{data.data}</Text>
+        </TextContainer>
+      ) : (
+        <FinderContainer>
+          {data.children.map((child) => (
+            <Item
+              type={child}
+              onDoubleClick={() => {
+                if (!isFile(child)) {
+                  setWindowList([
+                    ...windowList.filter((window) => window.id !== id),
+                    {
+                      ...windowList.find((window) => window.id === id)!,
+                      data: {
+                        name: `${data.name}/${child.name}`,
+                        children: data.children,
+                      },
                     },
-                  },
-                ]);
-              }
-            }}
-          >
-            {data.name}
-            {isFile(data)
-              ? {
-                  [FileEnum.TEXT]: '.txt',
-                  [FileEnum.IMAGE]: '.png',
-                  [FileEnum.VIDEO]: '.mp4',
-                }[data.type]
-              : ''}
-          </Item>
-        ))}
-      </BodyContainer>
+                  ]);
+                }
+              }}
+            >
+              {data.name}
+              {isFile(data)
+                ? {
+                    [FileEnum.TEXT]: '.txt',
+                    [FileEnum.IMAGE]: '.png',
+                    [FileEnum.VIDEO]: '.mp4',
+                  }[data.type]
+                : ''}
+            </Item>
+          ))}
+        </FinderContainer>
+      )}
     </Container>
   );
 }

@@ -1,13 +1,13 @@
-export type PositionType = {
-  x: number;
-  y: number;
-};
-
 export enum FileEnum {
   TEXT,
   IMAGE,
   VIDEO,
 }
+
+export type PositionType = {
+  x: number;
+  y: number;
+};
 
 export type FileType = {
   name: string;
@@ -22,7 +22,7 @@ export type FolderType = {
 
 export type WindowType = {
   id: number;
-  folder: FolderType;
+  data: FileType | FolderType;
   position: PositionType;
   isDeceased?: boolean;
 };

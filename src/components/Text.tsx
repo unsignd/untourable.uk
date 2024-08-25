@@ -12,6 +12,8 @@ const Container = styled.p`
   font-weight: 300;
   letter-spacing: -0.5px;
   text-transform: uppercase;
+
+  white-space: pre-wrap;
 `;
 
 export function Text({ children, ...props }: TextProps) {

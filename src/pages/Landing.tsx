@@ -59,22 +59,42 @@ export function Landing() {
         <Item
           type={data}
           onDoubleClick={(event) =>
-            !isFile(data)
-              ? setWindowList([
-                  ...windowList,
-                  {
-                    id: windowList.length,
-                    folder: {
-                      name: `~/${data.name}`,
+            setWindowList([
+              ...windowList,
+              {
+                id: windowList.length,
+                data: isFile(data)
+                  ? {
+                      name: `~/${data.name}${
+                        isFile(data)
+                          ? {
+                              [FileEnum.TEXT]: '.txt',
+                              [FileEnum.IMAGE]: '.png',
+                              [FileEnum.VIDEO]: '.mp4',
+                            }[data.type]
+                          : ''
+                      }`,
+                      type: data.type,
+                      data: data.data,
+                    }
+                  : {
+                      name: `~/${data.name}${
+                        isFile(data)
+                          ? {
+                              [FileEnum.TEXT]: '.txt',
+                              [FileEnum.IMAGE]: '.png',
+                              [FileEnum.VIDEO]: '.mp4',
+                            }[data.type]
+                          : ''
+                      }`,
                       children: data.children,
                     },
-                    position: {
-                      x: event.clientX,
-                      y: event.clientY,
-                    },
-                  },
-                ])
-              : undefined
+                position: {
+                  x: event.clientX,
+                  y: event.clientY,
+                },
+              },
+            ])
           }
         >
           {data.name}

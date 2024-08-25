@@ -6,6 +6,7 @@ import {
   PositionType,
   WindowType,
 } from '../types';
+import { readme } from '../assets/raw';
 
 const dataState = atom<(FileType | FolderType)[]>({
   key: 'dataState',
@@ -40,13 +41,13 @@ const dataState = atom<(FileType | FolderType)[]>({
       ],
     },
     {
-      name: 'stuff!',
+      name: 'stuff',
       children: [],
     },
     {
       name: 'readme',
       type: FileEnum.TEXT,
-      data: '',
+      data: readme,
     },
   ],
 });
