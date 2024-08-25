@@ -30,31 +30,23 @@ export function Landing() {
     <Container
       onMouseMove={(event) => {
         if (point) {
-          const newPosition = {
-            x:
-              (ogPosition?.x ??
-                windowList.find((window) => window.id === point.id)!.position
-                  .x) +
-              event.pageX -
-              point.position.x,
-            y:
-              (ogPosition?.y ??
-                windowList.find((window) => window.id === point.id)!.position
-                  .x) +
-              event.pageY -
-              point.position.y,
-          };
-
-          setWindowList([
-            ...windowList.filter((window) => window.id !== point.id),
-            {
-              ...windowList.find((window) => window.id === point.id)!,
-              position: newPosition,
-            },
-          ]);
-
           if (!ogPosition) {
-            setOgPosition(newPosition);
+            setOgPosition(
+              windowList.find((window) => window.id === point.id)!.position
+            );
+          } else {
+            const newPosition = {
+              x: ogPosition!.x + event.pageX - point.position.x,
+              y: ogPosition!.y + event.pageY - point.position.y,
+            };
+
+            setWindowList([
+              ...windowList.filter((window) => window.id !== point.id),
+              {
+                ...windowList.find((window) => window.id === point.id)!,
+                position: newPosition,
+              },
+            ]);
           }
         }
       }}
@@ -66,19 +58,19 @@ export function Landing() {
       {data.map((data) => (
         <Item
           type={data}
-          onDoubleClick={() =>
+          onDoubleClick={(event) =>
             !isFile(data)
               ? setWindowList([
                   ...windowList,
                   {
                     id: windowList.length,
                     folder: {
-                      name: data.name,
+                      name: `~/${data.name}`,
                       children: data.children,
                     },
                     position: {
-                      x: 0,
-                      y: 0,
+                      x: event.clientX,
+                      y: event.clientY,
                     },
                   },
                 ])
@@ -95,9 +87,11 @@ export function Landing() {
             : ''}
         </Item>
       ))}
-      {windowList.map((window) => (
-        <Window {...window} />
-      ))}
+      {windowList
+        .filter((window) => !window.isDeceased)
+        .map((window) => (
+          <Window {...window} />
+        ))}
     </Container>
   );
 }

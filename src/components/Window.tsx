@@ -123,7 +123,17 @@ export function Window({ id, folder, position, isDeceased }: WindowType) {
           </Button>
           <Button
             onMouseDown={(event) => event.stopPropagation()}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+
+              setWindowList([
+                ...windowList.filter((window) => window.id !== id),
+                {
+                  ...windowList.find((window) => window.id === id)!,
+                  isDeceased: true,
+                },
+              ]);
+            }}
           >
             <CancelSVG />
           </Button>
@@ -138,13 +148,11 @@ export function Window({ id, folder, position, isDeceased }: WindowType) {
                 setWindowList([
                   ...windowList.filter((window) => window.id !== id),
                   {
-                    id,
+                    ...windowList.find((window) => window.id === id)!,
                     folder: {
-                      name: data.name,
+                      name: `${folder.name}/${data.name}`,
                       children: data.children,
                     },
-                    position,
-                    isDeceased,
                   },
                 ]);
               }
