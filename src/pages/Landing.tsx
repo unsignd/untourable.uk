@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { Item } from '../components/Item';
 import { useRecoilState } from 'recoil';
-import { dataState, windowListState } from '../modules/atom';
+import { dataState, pointState, windowListState } from '../modules/atom';
 import { isFile } from '../utils';
-import { FileEnum } from '../types';
+import { FileEnum, PositionType } from '../types';
 import { Window } from '../components/Window';
+import { useState } from 'react';
 
 const Container = styled.div`
   width: 100%;
@@ -19,11 +20,49 @@ const Container = styled.div`
 `;
 
 export function Landing() {
+  const [ogPosition, setOgPosition] = useState<PositionType>();
+
   const [data] = useRecoilState(dataState);
   const [windowList, setWindowList] = useRecoilState(windowListState);
+  const [point, setPoint] = useRecoilState(pointState);
 
   return (
-    <Container>
+    <Container
+      onMouseMove={(event) => {
+        if (point) {
+          const newPosition = {
+            x:
+              (ogPosition?.x ??
+                windowList.find((window) => window.id === point.id)!.position
+                  .x) +
+              event.pageX -
+              point.position.x,
+            y:
+              (ogPosition?.y ??
+                windowList.find((window) => window.id === point.id)!.position
+                  .x) +
+              event.pageY -
+              point.position.y,
+          };
+
+          setWindowList([
+            ...windowList.filter((window) => window.id !== point.id),
+            {
+              ...windowList.find((window) => window.id === point.id)!,
+              position: newPosition,
+            },
+          ]);
+
+          if (!ogPosition) {
+            setOgPosition(newPosition);
+          }
+        }
+      }}
+      onMouseUp={() => {
+        setOgPosition(undefined);
+        setPoint(undefined);
+      }}
+    >
       {data.map((data) => (
         <Item
           type={data}

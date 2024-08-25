@@ -1,5 +1,11 @@
 import { atom } from 'recoil';
-import { FileEnum, FileType, FolderType, WindowType } from '../types';
+import {
+  FileEnum,
+  FileType,
+  FolderType,
+  PositionType,
+  WindowType,
+} from '../types';
 
 const dataState = atom<(FileType | FolderType)[]>({
   key: 'dataState',
@@ -50,4 +56,15 @@ const windowListState = atom<WindowType[]>({
   default: [],
 });
 
-export { dataState, windowListState };
+const pointState = atom<
+  | {
+      id: number;
+      position: PositionType;
+    }
+  | undefined
+>({
+  key: 'pointState',
+  default: undefined,
+});
+
+export { dataState, windowListState, pointState };
