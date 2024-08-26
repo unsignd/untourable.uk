@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Text } from './Text';
 import { FileType, FolderType } from '../types';
-import { ReactComponent as FileSVG } from '../assets/file_48.svg';
-import { ReactComponent as FolderSVG } from '../assets/folder_48.svg';
+import { ReactComponent as FileSVG } from '../assets/file_40.svg';
+import { ReactComponent as FolderSVG } from '../assets/folder_40.svg';
 import { isFile } from '../utils';
 import { HTMLAttributes, ReactNode } from 'react';
 
@@ -14,7 +14,9 @@ interface ItemProps extends HTMLAttributes<HTMLDivElement> {
 
 const Container = styled.div`
   width: 68px;
-  height: 92px;
+  height: 80px;
+
+  padding: 8px 0;
 
   display: flex;
   flex-direction: column;

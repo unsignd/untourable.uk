@@ -6,28 +6,34 @@ import {
   PositionType,
   WindowType,
 } from '../types';
-import { readme } from '../assets/raw';
 
 const dataState = atom<(FileType | FolderType)[]>({
   key: 'dataState',
   default: [
     {
-      name: 'aboutasdfasdfadf',
+      name: 'about',
       children: [
         {
           name: 'awards',
           type: FileEnum.TEXT,
-          data: '',
+          data: `* 2nd Award, 6th Netmarble Game Academy, 2021
+* 3rd Award, Software FUTURE&DREAM Challenge, 2023
+* 2nd Award, XdHacks Mini Vancouver, 2024
+          `,
         },
         {
           name: 'careers',
           type: FileEnum.TEXT,
-          data: '',
+          data: `* Senior Frontend Developer, Algorix LLC, 2022 - present
+* ???, Trajectory, 2024 - present
+* ???, Art Our Community, 2024 - present`,
         },
         {
           name: 'links',
           type: FileEnum.TEXT,
-          data: '',
+          data: `* https://github.com/unsignd/
+* https://instagram.com/untourablealbum/
+* https://linkedin.com/in/unsignd/`,
         },
       ],
     },
@@ -47,7 +53,16 @@ const dataState = atom<(FileType | FolderType)[]>({
     {
       name: 'readme',
       type: FileEnum.TEXT,
-      data: readme,
+      data: `welcome to my space!
+
+
+* ~/about: brief info about me
+* ~/projects: projects ive done
+* ~/stuff: shits, useful links, etc.
+
+
+check out freely
+have fun :')`,
     },
   ],
 });

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { FileEnum, WindowType } from '../types';
 import { ReactComponent as CancelSVG } from '../assets/cancel_10.svg';
 import { ReactComponent as MinimizeSVG } from '../assets/minimize_10.svg';
+import { ReactComponent as FileSVG } from '../assets/file_40.svg';
+import { ReactComponent as FolderSVG } from '../assets/folder_40.svg';
 import { Item } from './Item';
 import { isFile } from '../utils';
 import { useRecoilState } from 'recoil';
@@ -51,6 +53,31 @@ const HeaderContainer = styled.div`
     cursor: -moz-grabbing;
     cursor: -webkit-grabbing;
   }
+`;
+
+const TitleGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const TitleIcon = styled.div`
+  width: 18px;
+  height: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+`;
+
+const FileIcon = styled(FileSVG)`
+  height: 100%;
+`;
+
+const FolderIcon = styled(FolderSVG)`
+  height: 100%;
 `;
 
 const TitleText = styled(Text)`
@@ -102,7 +129,7 @@ const FinderContainer = styled.div`
 
   display: grid;
   grid-template-columns: repeat(auto-fill, 68px);
-  grid-template-rows: 72px;
+  grid-template-rows: 80px;
   gap: 80px;
 `;
 
@@ -125,7 +152,10 @@ export function Window({ id, name, data, position }: WindowType) {
           })
         }
       >
-        <TitleText>{name}</TitleText>
+        <TitleGroup>
+          <TitleIcon>{isFile(data) ? <FileIcon /> : <FolderIcon />}</TitleIcon>
+          <TitleText>{name}</TitleText>
+        </TitleGroup>
         <ButtonGroup>
           <Button
             onMouseDown={(event) => event.stopPropagation()}
@@ -164,20 +194,36 @@ export function Window({ id, name, data, position }: WindowType) {
           {data.children.map((child) => (
             <Item
               type={child}
-              onDoubleClick={() => {
-                if (!isFile(child)) {
-                  setWindowList([
-                    ...windowList.filter((window) => window.id !== id),
-                    {
-                      ...windowList.find((window) => window.id === id)!,
-                      name: `${name}/${child.name}`,
-                      data: {
-                        name: child.name,
-                        children: child.children,
-                      },
+              onDoubleClick={(event) => {
+                setWindowList([
+                  ...windowList,
+                  {
+                    id: windowList.length,
+                    name: `${name}/${child.name}${
+                      isFile(child)
+                        ? {
+                            [FileEnum.TEXT]: '.txt',
+                            [FileEnum.IMAGE]: '.png',
+                            [FileEnum.VIDEO]: '.mp4',
+                          }[child.type]
+                        : ''
+                    }`,
+                    data: isFile(child)
+                      ? {
+                          name: child.name,
+                          type: child.type,
+                          data: child.data,
+                        }
+                      : {
+                          name: child.name,
+                          children: child.children,
+                        },
+                    position: {
+                      x: event.clientX,
+                      y: event.clientY,
                     },
-                  ]);
-                }
+                  },
+                ]);
               }}
             >
               {child.name}
