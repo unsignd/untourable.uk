@@ -11,8 +11,20 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 40px;
 
   border-bottom: 1px solid #808080;
+`;
+
+const TitleText = styled(Text)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const TimeText = styled(Text)`
+  text-size-adjust: none;
+  flex-shrink: 0;
 `;
 
 export function Header() {
@@ -30,8 +42,8 @@ export function Header() {
 
   return (
     <Container>
-      <Text>HTTPS://UNTOURABLE.UK/</Text>
-      <Text>{new Date().toLocaleString()}</Text>
+      <TitleText>{window.location.href.toUpperCase()}</TitleText>
+      <TimeText>{time}</TimeText>
     </Container>
   );
 }

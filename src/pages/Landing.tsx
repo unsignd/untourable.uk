@@ -14,7 +14,7 @@ const Container = styled.div`
   padding: 40px;
 
   display: grid;
-  grid-template-columns: repeat(auto-fill, 48px);
+  grid-template-columns: repeat(auto-fill, 68px);
   grid-template-rows: 72px;
   gap: 80px;
 `;
@@ -63,30 +63,23 @@ export function Landing() {
               ...windowList,
               {
                 id: windowList.length,
+                name: `~/${data.name}${
+                  isFile(data)
+                    ? {
+                        [FileEnum.TEXT]: '.txt',
+                        [FileEnum.IMAGE]: '.png',
+                        [FileEnum.VIDEO]: '.mp4',
+                      }[data.type]
+                    : ''
+                }`,
                 data: isFile(data)
                   ? {
-                      name: `~/${data.name}${
-                        isFile(data)
-                          ? {
-                              [FileEnum.TEXT]: '.txt',
-                              [FileEnum.IMAGE]: '.png',
-                              [FileEnum.VIDEO]: '.mp4',
-                            }[data.type]
-                          : ''
-                      }`,
+                      name: data.name,
                       type: data.type,
                       data: data.data,
                     }
                   : {
-                      name: `~/${data.name}${
-                        isFile(data)
-                          ? {
-                              [FileEnum.TEXT]: '.txt',
-                              [FileEnum.IMAGE]: '.png',
-                              [FileEnum.VIDEO]: '.mp4',
-                            }[data.type]
-                          : ''
-                      }`,
+                      name: data.name,
                       children: data.children,
                     },
                 position: {

@@ -12,7 +12,7 @@ const dataState = atom<(FileType | FolderType)[]>({
   key: 'dataState',
   default: [
     {
-      name: 'about',
+      name: 'aboutasdfasdfadf',
       children: [
         {
           name: 'awards',

@@ -22,6 +22,7 @@ export type FolderType = {
 
 export type WindowType = {
   id: number;
+  name: string;
   data: FileType | FolderType;
   position: PositionType;
   isDeceased?: boolean;

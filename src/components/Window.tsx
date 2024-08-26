@@ -37,6 +37,7 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 40px;
 
   border-bottom: 1px solid #808080;
 
@@ -52,9 +53,17 @@ const HeaderContainer = styled.div`
   }
 `;
 
+const TitleText = styled(Text)`
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
 const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
+
+  flex-shrink: 0;
 `;
 
 const Button = styled.button`
@@ -92,12 +101,12 @@ const FinderContainer = styled.div`
   padding: 40px;
 
   display: grid;
-  grid-template-columns: repeat(auto-fill, 48px);
+  grid-template-columns: repeat(auto-fill, 68px);
   grid-template-rows: 72px;
   gap: 80px;
 `;
 
-export function Window({ id, data, position }: WindowType) {
+export function Window({ id, name, data, position }: WindowType) {
   const [isMinimized, setIsMinimzed] = useState<boolean>(false);
 
   const [windowList, setWindowList] = useRecoilState(windowListState);
@@ -116,7 +125,7 @@ export function Window({ id, data, position }: WindowType) {
           })
         }
       >
-        <Text>{data.name}</Text>
+        <TitleText>{name}</TitleText>
         <ButtonGroup>
           <Button
             onMouseDown={(event) => event.stopPropagation()}
@@ -161,22 +170,23 @@ export function Window({ id, data, position }: WindowType) {
                     ...windowList.filter((window) => window.id !== id),
                     {
                       ...windowList.find((window) => window.id === id)!,
+                      name: `${name}/${child.name}`,
                       data: {
-                        name: `${data.name}/${child.name}`,
-                        children: data.children,
+                        name: child.name,
+                        children: child.children,
                       },
                     },
                   ]);
                 }
               }}
             >
-              {data.name}
-              {isFile(data)
+              {child.name}
+              {isFile(child)
                 ? {
                     [FileEnum.TEXT]: '.txt',
                     [FileEnum.IMAGE]: '.png',
                     [FileEnum.VIDEO]: '.mp4',
-                  }[data.type]
+                  }[child.type]
                 : ''}
             </Item>
           ))}

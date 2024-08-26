@@ -19,13 +19,19 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   gap: 8px;
 
   cursor: pointer;
 
   &:hover {
+    gap: 9px;
+
     border: 1px dotted #808080;
+
+    & * {
+      margin-top: -1px;
+    }
   }
 `;
 
